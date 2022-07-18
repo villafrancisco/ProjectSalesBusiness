@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+<title>Sales Business</title>
+</head>
+<body>
+	<div class="container">
+
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item"><a class="nav-link" href="/products">Productos
+
+					</a></li>
+					<li class="nav-item"><a class="nav-link" href="/clients">Clientes</a></li>
+					<li class="nav-item"><a class="nav-link" href="/sales">Ventas</a></li>
+					<li class="nav-item"><a class="nav-link" href="/discounts">Descuentos</a></li>
+					<li class="nav-item"><a class="nav-link" href="/stadistics">Estadísticas</a></li>
+
+				</ul>
+
+			</div>
+		</nav>
+
+		<div class="row">
+			<div
+				class="col-sm-10 col-md-10 col-lg-10 col-xl-10 mx-auto text-center">
+				<!-- <h1>
+					<a href="/pupils"><i class="bi bi-arrow-left-square-fill"></i></a>
+				</h1> -->
+				<h2 class="mr-auto ml-auto">Producto</h2>
+
+			</div>
+		</div>
+		<div class="row">
+		
+			 <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 mx-auto">
+
+				<form action="insert" method="POST">
+
+					<div class="form-group">
+						<label for="name">Producto: </label> <input class="form-control" type="text" name="name"
+							id="name"> 
+					</div>
+					 <div class="form-group">
+						<select
+							class="form-control" id="fk_category" name="fk_category">
+							<option selected>Categoria</option>
+							<option th:each="category:${categories}"
+								th:value="${category.pk_category}" th:text="${category.name}"
+								></option>
+						</select>
+					</div> 
+					 <div class="form-group">
+						<label for="price">Precio</label> <input type="number"
+							class="form-control" id="price" name="price"
+							>
+
+					</div>
+					<button type="submit" class="btn btn-primary">Guardar</button>
+				</form>
+			</div>
+		</div>
+
+
+	</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+		crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+<title>Sales Business</title>
+</head>
+<body>
+	<div class="container">
+
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item"><a class="nav-link" href="/products">Productos
+
+					</a></li>
+					<li class="nav-item"><a class="nav-link" href="/clients">Clientes</a></li>
+					<li class="nav-item"><a class="nav-link" href="/sales">Ventas</a></li>
+					<li class="nav-item"><a class="nav-link" href="/discounts">Descuentos</a></li>
+					<li class="nav-item"><a class="nav-link" href="/stadistics">Estadísticas</a></li>
+
+				</ul>
+
+			</div>
+		</nav>
+
+		<div class="row">
+			<div
+				class="col-sm-10 col-md-10 col-lg-10 col-xl-10 mx-auto text-center">
+				<!-- <h1>
+					<a href="/pupils"><i class="bi bi-arrow-left-square-fill"></i></a>
+				</h1> -->
+				<h2 class="mr-auto ml-auto">Ventas</h2>
+
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
+				<a href="sale/new" class="badge badge-primary p-2">Insertar
+					nueva venta</a>
+			</div>
+			<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+				<label for="filter">Filtrar por Categoría</label> <select
+					class="form-control" name="filter" id="filter">
+					<option selected>Categoría</option>
+					<option th:each="category:${categories}"
+						th:value="${category.pk_category}" th:text="${category.name}"></option> 
+				</select>
+			</div>
+		</div>
+			<table
+				class="table table-striped table-borderless table-hover table-sm">
+
+				<thead class="thead-light">
+					<tr>
+						<th scope="col">Numero de Venta</th>
+						<th scope="col">Producto</th>
+						<th scope="col">Categoría</th>
+						<th scope="col">Unidades</th>
+						<th scope="col">Cliente</th>
+						<th scope="col">Almacén</th>
+						<th scope="col">Fecha</th>
+						<th class="text-center" scope="col">Editar</th>
+						<th class="text-center" scope="col">Borrar</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr th:each="purchase,iterator:${purchases}">
+
+						<td th:text="${purchase.pk_purchase}"></td>
+						<td th:text="${purchase.product.name}"></td>
+						<td th:text="${purchase.product.category.name}"></td>
+						<td th:text="${purchase.units}"></td>
+						<td th:text="${purchase.client.name}"></td>
+						<td th:text="${purchase.store.town}"></td>
+						<td th:text="${purchase.date}"></td>
+						<td class="text-center"><a
+							th:href="'/sale/'+ @{${purchase.pk_purchase}} +'/edit'"><i
+								class="bi bi-pen"></i></a></td>
+						<td class="text-center"><a
+							th:href="'/sale/'+ @{${purchase.pk_purchase}} +'/delete'"><i
+								class="bi bi-trash"></i></a></td>
+
+
+					</tr>
+
+				</tbody>
+			</table>
+
+		</div>
+
+
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+			integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+			crossorigin="anonymous"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+			crossorigin="anonymous"></script>
+			<script>
+	$(document).ready(function() {
+		
+		
+	
+
+	});
+		
+		document.querySelector("#filter").addEventListener('change',function(e){
+			fetch("http://localhost:8080/api/purchase/product/category/"+e.target.value)
+					.then(res=>res.ok ? Promise.resolve(res) : Promise.reject(res))
+					.then(res=>res.json())
+					.then(res=>{
+						document.querySelector('tbody').innerHTML="";
+						res.forEach(purchase => {
+								document.querySelector('tbody').insertAdjacentHTML("beforeend",bodyTable(purchase))	
+						});
+						
+					});
+				});
+		
+		
+		
+		function bodyTable(purchase){
+			var date=new Date(purchase.date);
+			var plantilla=`<tr>
+				<td>${purchase.pk_purchase}</td>	
+				<td>${purchase.product.name}</td>
+				<td>${purchase.product.category.name}</td>
+				<td>${purchase.units}</td>
+				<td>${purchase.client.name}</td>
+				<td>${purchase.store.town}</td>
+				<td>${purchase.date}</td>
+				<td class="text-center"><a href="/sale/${purchase.pk_purchase}/edit"><i
+				class="bi bi-pen"></i></a></td>
+				<td class="text-center"><a href="/sale/${purchase.pk_purchase}/delete"><i
+					class="bi bi-trash"></i></a></td>
+				</tr>`;
+			return plantilla;
+		}
+		
+		
+	</script>
+</body>
+</html>
+
